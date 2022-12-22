@@ -1,4 +1,4 @@
-.TH CAKE 8 "19 July 2018" "iproute2" "Linux"
+.TH CAKE 8 "2022-12-22" "iproute2" "Linux"
 .SH NAME
 CAKE \- Common Applications Kept Enhanced (CAKE)
 .SH SYNOPSIS
@@ -133,13 +133,26 @@ diffserv implementation.  Overhead compensation for various encapsulation
 schemes is tightly integrated.
 
 All settings are optional; the default settings are chosen to be sensible in
-most common deployments.  Most people will only need to set the
+most common deployments.  However, if used in a setup with local NAT the
+.B nat
+parameter needs to be set - this instructs CAKE to make lookups on the NAT
+table for correct flow and host identification.  The
 .B bandwidth
-parameter to get useful results, but reading the
+parameter is required to shape traffic below device's link speed to avoid buffering in
+external devices with slower link speeds, like modems.  CAKE calculates
+bandwidth use per package, thus the
 .B Overhead Compensation
-and
+may need to be adjusted to reflect the setup.  If shaping a link for
+non-internet traffic with considerable larger or smaller roundtrips than the
+default 100ms adjustments to the
 .B Round Trip Time
-sections is strongly encouraged.
+are necessary, for optimal results.
+
+If CAKE is used on 10GE links, the default
+.B split-gso
+parameter may limit the maximum achievable throughput, see
+.B Other Parameters
+section.
 
 .SH SHAPER PARAMETERS
 CAKE uses a deficit-mode shaper, which does not exhibit the initial burst
